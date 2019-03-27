@@ -1,0 +1,69 @@
+
+SQL*Loader: Release 11.2.0.1.0 - Production on 星期四 8月 16 22:32:41 2018
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+控制文件:      E:\sqlload\custinf.ctl
+数据文件:      E:\sqlload\客户资料表.txt
+  错误文件:    E:\sqlload\custinf.bad
+  废弃文件:    未作指定
+ 
+(可废弃所有记录)
+
+要加载的数: ALL
+要跳过的数: 1
+允许的错误: 10
+绑定数组: 128 行, 最大 256000 字节
+继续:    未作指定
+所用路径:       常规
+
+表 CUSTINF,已加载从每个逻辑记录
+插入选项对此表 APPEND 生效
+TRAILING NULLCOLS 选项生效
+
+   列名                        位置      长度  中止 包装数据类型
+------------------------------ ---------- ----- ---- ---- ---------------------
+FUND_NO                             FIRST    20   |       CHARACTER            
+CUST_NAME                            NEXT    80   |       CHARACTER            
+ORGIDT                               NEXT    18   |       CHARACTER            
+CARD_NO                              NEXT    20   |       CHARACTER            
+CARD_TYPE                            NEXT    12   |       CHARACTER            
+PASSNO                               NEXT    40   |       CHARACTER            
+MOBILE                               NEXT    40   |       CHARACTER            
+EMAIL                                NEXT    30   |       CHARACTER            
+ASSET_DATE                           NEXT    12   |       CHARACTER            
+ASSET_BAL                            NEXT    20   |       CHARACTER            
+ISDEPOSIT                            NEXT     8   |       CHARACTER            
+OTHER_BAL                            NEXT    20   |       CHARACTER            
+CRE_BAL                              NEXT    20   |       CHARACTER            
+CNY_BAL                              NEXT    20   |       CHARACTER            
+FUND_BAL                             NEXT    20   |       CHARACTER            
+FINA_BAL                             NEXT    20   |       CHARACTER            
+PAPER_GOLD                           NEXT    20   |       CHARACTER            
+XYU_BAL                              NEXT    20   |       CHARACTER            
+INSURE_BAL                           NEXT    20   |       CHARACTER            
+CUSIDT                               NEXT    12   |       CHARACTER            
+CUSIDT_LVL                           NEXT    10   |       CHARACTER            
+INVESTOR_TYPE                        NEXT    12   |       CHARACTER            
+
+
+表 CUSTINF:
+  160913 行 加载成功。
+  由于数据错误, 0 行 没有加载。
+  由于所有 WHEN 子句失败, 0 行 没有加载。
+  由于所有字段都为空的, 0 行 没有加载。
+
+
+为绑定数组分配的空间:                 68864 字节 (128 行)
+读取   缓冲区字节数: 1048576
+
+跳过的逻辑记录总数:          1
+读取的逻辑记录总数:        160913
+拒绝的逻辑记录总数:          0
+废弃的逻辑记录总数:        0
+
+从 星期四 8月  16 22:32:41 2018 开始运行
+在 星期四 8月  16 22:32:44 2018 处运行结束
+
+经过时间为: 00: 00: 02.94
+CPU 时间为: 00: 00: 00.85

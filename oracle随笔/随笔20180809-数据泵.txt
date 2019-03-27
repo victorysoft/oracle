@@ -1,0 +1,50 @@
+--查询路径
+ select * from dba_directories;
+--创建路径
+ create directory expdp as 'E:\expdp';
+--路径授权
+ grant read,write on directory expdp to puser;
+--删除路径
+ drop directory expdp;
+--查询数据库版本
+ select * from v$version;
+--查询用户信息
+  select * from dba_users;
+--修改用户默认表空间
+ alter user mis default tablespace puser;
+ 修改用户的默认表空间之后 其之前表还存在之前的表空间上 即：表空间上对象不会随用户修改而修改
+ 
+--查询段的信息 或 查询表空间上对象的信息
+  select * from dba_segments where tablespace_name = 'PUSER';
+
+数据泵导出expdp 可分为 按表导出、按模式(用户)导出，按表空间导出和整个数据库导出
+  --按表导出(可以加过滤条件 query:'where depo=20' 可以用/来转义特殊符号)
+  expdp mis/mis tables=ykcc_ccms directory=expdp dumpfile=ykcc_ccms.dmp logfile=ykcc_ccms.log version=11.2.0.1.0
+  --按模式导出
+  expdp mis/mis schemas=mis directory=expdp dumpfile=mis.dmp exclude=view logfile=mis.log version=11.2.0.1.0
+  --按表空间导出
+  expdp puser/puser tablespaces=puser directory=expdp dumpfile=puser.dmp include=table logfile=puser.log version=11.2.0.1.0
+  --整个数据库导出(估计空间大小)
+  expdp puser/puser full=y directory=expdp dumpfile=full.dmp logfile=full.log
+  --评估导出 
+  expdp puser/puser full =y estimate_only=y logfile=full.log --不产生日志
+ 
+
+导出总结：常用参数 导表table 导模式schemas 导表空间tablespaces 导整个库full 
+          directory dumpfile logfile version exclude include parallel 估算书库大小不做导出estimate_only
+          导表时 可能用到query
+          
+数据泵导入impdp 可分为 按表导入、按模式(用户)导入，按表空间导入和整个数据库导入
+  --导入表
+  impdp puser/puser table=ykcc_ccms dirertory=impdp dumpfile=puser.dmp logfile=puser.log
+  --将表导入到指定的用户下
+  impdp puser/puser remap_schemas=source_schemas:target_schemas directory=impdp dumpfile=puser.dmp logfile=puser.log
+  --导入到指定的表空间中
+  impdp puser/puser tablespace=puser dirertory=impdp dumpfile=puser.dmp logfile=puser.log
+  --导入整个数据库
+  impdb puser/puser full=y directory=impdp dumpfile=full.dmp;
+  
+导入总结：常用参数 remap_datafile=source_datafile:targer_datafile
+                   remap_tablespace=source_tablespace:targer_tablespace
+                   remap_schemas=source_schema:targer_schema
+                   table_exists_actoin={SKIP | APPEND | TRUNCATE | FRPLACE }

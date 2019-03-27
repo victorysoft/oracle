@@ -1,0 +1,75 @@
+<!--上传到github上-->
+1、先在github上创建repository  库名字与项目名字相同
+2、在git命令界面中 进入到想上传项目的目录中
+   git clone https://github.com/victorysoft/studentmanager.git
+   (自动将github上的版本设为远程仓库)
+3、git add .                        //文件全部上传
+4、git commit  -m  "填写备注信息"   //提交
+5、git push -u origin master        //上传到github上
+
+<!--部分修改上传-->
+1. git add .(文件name) //添加文件到本地仓库
+2. git commit -m "first commit" //添加文件描述信息
+3. git remote add origin https://github.com/victorysoft/studentmanager.git  //连接远程库(如果项目是从github克隆下来的 此步骤可以省略)
+4. git pull origin master    // 更新本地代码
+5. git push -u origin master //把本地仓库的文件推送到远程仓库
+
+<!--恢复到以前版本-->
+1、假设查到历史版本的id是fae6966548e3ae76cfa7f38a461c438cf75ba965。
+$ git log
+2、 恢复到历史版本
+$ git reset --hard fae6966548e3ae76cfa7f38a461c438cf75ba965
+3、 把修改推到远程服务器
+$ git push -f -u origin master 
+
+<!--撤销--> 
+1、恢复暂存区的指定文件到工作区
+$ git checkout [file]
+2、 恢复某个commit的指定文件到暂存区和工作区
+$ git checkout [commit] [file]
+3、恢复暂存区的所有文件到工作区
+$ git checkout .
+
+<!--查看某一次提交更新-->
+1、查看某一次提交更新
+$ git show b10cc1238e355c02a044ef9f9860811ff605c9b4
+
+<!--分支-->
+# 列出所有本地分支
+$ git branch
+
+# 列出所有远程分支
+$ git branch -r
+
+# 列出所有本地分支和远程分支
+$ git branch -a
+
+# 新建一个分支，但依然停留在当前分支
+$ git branch [branch-name]
+
+# 新建一个分支，并切换到该分支
+$ git checkout -b [branch]
+
+# 切换到指定分支，并更新工作区
+$ git checkout [branch-name]
+
+# 合并指定分支到当前分支
+$ git merge [branch]
+
+# 删除分支
+$ git branch -d [branch-name]
+
+# 删除远程分支
+$ git push origin --delete [branch-name]
+$ git branch -dr [remote/branch]
+
+<!--推送到远程分支-->
+git push origin test01(分支名字)  切换到test01下面 git checkout test01
+把本地test01分支推送到远程
+
+删除本地分支
+git branch -d Chapater8
+
+删除远程分支
+git push origin --delete Chapater6
+

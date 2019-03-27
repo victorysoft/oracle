@@ -1,0 +1,33 @@
+select * from boc_private as of timestamp to_timestamp('2018-08-01 20:48:00','yyyy-mm-dd hh24:mi:ss');
+flashback table boc_private to timestamp to_timestamp('2018-08-01 20:48:00','yyyy-mm-dd hh24:mi:ss');
+alter table boc_private enable row movement;
+
+
+闪回分为三种：
+  一、闪回表
+      查看某个闪回点表的状态
+      select * from table_name as of timestamp to_timestamp('2018-08-01 20:48:00','yyyy-mm-dd hh24:mi:ss');
+      查看一个小时前的状态
+      select * from table_name as of timestamp (systimestamp - 1/24);
+      找回数据 闪回到某个时间点
+      alter table table_name enable row movement;  --行的物理位置发生了变化，所有需要行可以移动
+      flashback table table_name to timestamp to_timestamp 查看一个小时前的状态
+      插入删除的数据
+      insert into table_name 
+       (select * from table_name as of timestamp (systimestamp - 1/24)
+        minus
+        select * from table);
+        
+  二、闪回删除
+      可以找回drop掉的表
+      show recyclebin; --查看回收站(在表空间中的逻辑机构)
+      彻底删除表
+      drop table table_name purge;
+      清空回收站
+      drop recyclebin purge;  
+      找回drop掉的表
+      flashback table table_name before drop;
+      或重命名找回来的表
+      flashback table table_naem before drop rename to new_naem;
+  三、闪回数据库
+

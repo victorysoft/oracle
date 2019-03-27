@@ -1,0 +1,23 @@
+options(skip=1,rows=128)                          --skip跳过几行 rows多少行提交一次 默认128
+load data
+characterset 'UTF8'                                --设置编码格式 
+infile 'E:\sqlload\用户资料表.txt'
+append into table custinf                          --指定装载方式和导入数据的表
+fields terminated by '|'                           --字段之间的分隔值为|,
+optionally enclosed by '"'                         --界定符号为'"'
+when card_num!=null                                --可以加限定条件
+trailing nullcols                                  --没有值的字段设置为空,解决空值问题
+( card_num char(7),
+  password char(14),
+  name char(10) "upper(:name)",                            
+  orgidt char(10),
+  role   char(60),
+  mobile char(14),
+  phone  char(14),
+  email  char(30)
+ )
+  
+sqlldr mis/mis control='E:\sqlload\custinf.ctl' data='E:\sqlload\用户资料表.txt' 
+errors=10 parallel=true log='E:\sqlload\custinf.log' bad='E:\sqlload\custinf.bad'
+
+select lengthb('查询占字节长度') from dual;

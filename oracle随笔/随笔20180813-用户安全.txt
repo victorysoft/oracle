@@ -1,0 +1,47 @@
+--查看临时表空间
+  select * from dba_temp_files;
+--创建用户
+  create user luser identified by luser
+  default tablespace mis temporary tablespace temp;
+  指定表空间和临时表空间
+--修改用户表空间和默认表空间
+  alter user user_name default tablespace puser temporary tablespace temp;
+--删除用户(包括用户含有的对象)
+  drop user mis cascade;
+--锁定用户账号和解锁用户账号
+  alter user user_name account lock;
+  alter user user_name account unlock;
+--强制用户修改密码
+  alter user user_name password expore;
+--修改用户密码
+  alter user user_name identified by new_password;
+  
+
+权限分为两种：系统权限和对象权限
+  系统权限：影响数据字典
+  对象权限：影响数据
+  
+--授予权限和撤销权限
+  grant create table to luser with admin option;  --可以将权限授予其他账户
+  grant connect to luser  with admin option;
+  revoke create table from luser;                 --撤销权限不会级联
+--授予对象权限
+  grant select on mis.bn_born to puser with grant option;
+  revoke select on mis.bn_born from puser;        --对象权限  级联撤销
+--查询用户有哪些权限
+  select * from dba_sys_privs where grantee = 'LUSER';  --用户系统权限
+  
+--创建角色
+  create role ro_mis_high;
+  grant select on mis.bn_borm to ro_mis;
+  grant select on mis.bn_bois to ro_mis;
+  grant insert on mis.bn_bois to ro_mis;
+--授权角色
+  grant ro_mis_high to luser;
+--删除角色
+  drop role ro_mis_high;
+--查询用户有哪些角色
+  select * from dba_role_privs where grantee = 'LUSER';
+  
+--查询用户默认表空间
+  select * from dba_users;

@@ -1,0 +1,68 @@
+v$session动态性能视图
+  1  sid:会话id (不能唯一确定一个会话 于serial#联合用 可以与v$locked_objects中的session_id关联)
+  2  serial#:会话序列，会话可以重用，但序列不会
+  3  audsid:审计id  
+       可以用来确定会话  select userenv('sessionid') from dual;  --13567
+                         select * from v$session where audsid = '13567';
+  4  paddr:session进程地址 (可以与 v$process 中addr关联)
+  5  user#；use_id  和dba_users中同一个
+  6  username:oracle用户名 dba_users中username
+  7  lockwait:等待锁的地址
+  8  status:active 正在执行sql inactive 等待执行sql killde 被杀死的会话
+  9  osuser:操作系统用户名
+  10 machine:机器名
+  11 program:应用程序名字 如：sqldeveloper
+  12 sql_hash_value:sql哈希值  可以连接v$sqlarea中的hash_value
+  13 sql_addr:   可以连接v$sqlarea中的address
+  14 sql_id: (也许可以连接v$sqlarea中的sql_id)
+  15 server 服务器类型：DEDICATED（独有）、SHARED（共享）
+  
+v$locked_objects动态性能视图
+  1 object_id:被锁对象id  可以与dba_objects中的object_id 关联
+  2 session_id:被锁对象的会话id  与v$session中的sid关联
+  3 oracle_username:被锁对象属于哪个用户 
+  4 os_user_name:操作系统用户名
+  5 locked_mode:会话保持锁的模式
+ 
+ dba_objects静态性能视图
+  1 owner:对象所属用户
+  2 object_name:对象的名字
+  3 object_id:对象id
+  4 object_type:对象类型
+  5 status:对象状态
+  
+v$sqlarea动态性能视图
+  1 sql_text:sql语句的内容
+  2 sql_id: 可以与v$session中的sql_id关联
+  3 executions：sql执行次数
+  4 disk_read: 读磁盘的次数
+  5 address: 与v$session中的sql_addr关联
+  6 hash_value: 与v$session中的sql_hash_value关联
+  7 cpu_time:cpu时间 (一秒的百万分之一)
+  8 sharable_mem：占用shared pool的内存多少
+  9 buffer_gets: 读取缓冲区的次数
+  10 command_type:命令类型(3:select,2:insert;6:update;7delete;47:pl/sql程序单元)
+  
+  
+ --查询死锁
+       select a.sid,
+              a.serial#,
+              b.oracle_username, --oracle登录用户名
+              d.object_name,     --被锁对象名称
+              c.sql_text,        --造成死锁的sql
+              b.locked_mode,    
+              a.lockwait,
+              a.status,
+              a.machine,         --机器名称
+              a.program          --应用程序
+              from v$session a
+              join v$locked_object b
+                on b.session_id = a.sid
+              join v$sqlarea c
+                on c.sql_id = a.sql_id
+              join dba_objects d
+                on d.object_id = b.object_id;
+                
+ --杀掉会话
+    alter system kill session 'sid,serial#';
+               

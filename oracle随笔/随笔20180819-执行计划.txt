@@ -1,0 +1,41 @@
+--查看表上的索引和索引与列的关系
+select * from user_ind_columns;
+--查看表上的索引及索引类型
+select * from dba_indexes;
+
+--查看执行计划
+explain plan for select * from dual;
+select * from table(dbma_xplan.display);
+
+--执行计划查看规则
+  1.operation缩进最多的先执行
+  2.缩进同样多的上面的先执行
+  3.执行完一个缩进块，再执行下一个缩进块。
+  
+--执行计划应用总结
+  1.尽量不要全表扫描(TABLE ACCESS FULL);
+  2.尽量走索引;
+  3.驱动表尽量小;
+  
+/************  执行计划 ************/
+表访问的几种方式：（非全部）
+
+  TABLE ACCESS FULL（全表扫描）(应避免)
+  TABLE ACCESS BY ROWID（通过ROWID的表存取）
+  TABLE ACCESS BY INDEX SCAN（索引扫描）
+  
+索引扫描又分五种：
+
+  INDEX UNIQUE SCAN（索引唯一扫描）
+  INDEX RANGE SCAN（索引范围扫描）
+  INDEX FULL SCAN（索引全扫描）
+  INDEX FAST FULL SCAN（索引快速扫描）
+  INDEX SKIP SCAN（索引跳跃扫描）
+
+表连接的几种方式：
+
+  NESTED LOOPS（嵌套循环）  (常用)
+  HASH JOIN（哈希连接）     (常用)
+  CARTESIAN PRODUCT（笛卡尔积）
+  SORT MERGE JOIN（排序-合并连接）
+   

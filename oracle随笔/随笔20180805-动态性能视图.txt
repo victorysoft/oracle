@@ -1,0 +1,24 @@
+decode(exp,if1,then1,if2,then2,...defaule)
+rank() over(partition by column_name order by)        --考虑并列数据，有并列 空一个 （序号不连续）
+dense_rank() over(partition by column_name order by)  --考虑并列数据，有并列 不空   （序号数据连续）
+row_number() over(partition by column_name order by)  --不考虑并列数据              （序号数据连续）
+
+/***************************************************************/
+数据字典分为：数据字典表 和 数据字典视图
+   数据字典表由$ORACLE_HOME/rdbms/admin/sql.bsq 脚本创建
+   数据字典视图分为两类：静态性能视图和动态性能视图
+      静态性能视图：user_*  all_*    dba_*
+      动态性能视图由脚本：$ORACLE_HOME/rdbms/admin/catalog.sql
+        v$* 和 gv$*  v$*是v_$的同义词  gv$*是gv_$同义词
+        v_$ 和 gv_$ 来自 x$表
+       --查询对象是同义词还是视图
+       select object_type from all_objects where object_name=upper('v$sql');
+       
+总结：在实例启动时，会先创建X$表，然后基于X$表创建GV_$ 和 V_$ 视图，在基于GV_$ 和V_$视图创建GV$和V$同义词。 
+      我们一般查询的都是同义词。 关于这些视图的定义，可以通过V$FIXED_VIEW_DEFINITION 视图 来查看。 
+      在数据库运行期间，动态性能视图保存在内存中，时刻监控着数据库的状态，我们在需要的时候可以查看这些视图。 
+      当实例关闭时，数据库又会从内存中自动删除这些动态性能视图。
+      
+查看当前用户回话audsid  (个人理解  唯一确定会话)
+ select userenv('sessionid') from dual; 结果为v$session中的audsid --userenv 用户执行环境
+ 

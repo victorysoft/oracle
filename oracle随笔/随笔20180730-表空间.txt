@@ -1,0 +1,48 @@
+--物理路径 
+select tablespace_name,
+       file_name,
+       file_id,
+       round(bytes/(1024*1024),2) 空间M,
+       online_status
+       from dba_data_files;
+       
+--查询表空间使用情况
+select a.tablespace_name 表空间名,
+       a.file_name 物理路径,
+       全部空间M,
+       剩余空间M,
+       已用空间M,
+       (round(已用空间M/全部空间M,2)*100)||'%' 使用率 
+       from (select a.tablespace_name ,
+                    a.file_name ,
+                    sum(round(a.bytes/(1024*1024),2)) 全部空间M,
+                    sum(round(b.bytes/(1024*1024),2)) 剩余空间M,
+                    sum(round(a.bytes/(1024*1024),2)-round(b.bytes/(1024*1024),2)) 已用空间M
+                    from dba_data_files a
+                    left join dba_free_space b
+                      on b.tablespace_name = a.tablespace_name
+                    group by a.tablespace_name,a.file_name
+             ) a;
+--创建表空间
+create tablespace puser 
+datafile 'E:\APP\ORADATA\ORCL\PUSER01.DBF' size 1g
+autoextend on next 100m maxsize 2g;
+--修改表空间
+alter database datafile 'E:\APP\ORADATA\ORCL\PUSER01.DBF' resize 2g;
+--网表空间添加文件
+alter tablespace puser
+add datafile 'E:\APP\ORADATA\ORCL\PUSER02.DBF' size 100m;
+--设置默认表空间
+alter database default tablespace puser;
+--删除表空间
+drop tablespace puser including contents and datafiles;
+--查看段信息
+select segment_type,segment_name,tablespace_name from dba_segments where owner = 'SYS';
+
+--修改表空间名字
+alter tablespace uspace rename to puser;
+--修改表空间文件名字
+alter tablespace puser offline;
+alter tablespace puser 
+rename datafile 'E:\APP\ORADATA\ORCL\USPACE01.DBF' to 'E:\APP\ORADATA\ORCL\PUSER01.DBF';
+alter tablespace puser online;
