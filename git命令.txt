@@ -14,6 +14,11 @@
 4. git pull origin master    // 更新本地代码
 5. git push -u origin master //把本地仓库的文件推送到远程仓库
 
+<!--修改远程仓库地址-->
+先删后加
+git remote rm origin
+git remote add origin [url]
+
 <!--恢复到以前版本-->
 1、假设查到历史版本的id是fae6966548e3ae76cfa7f38a461c438cf75ba965。
 $ git log
