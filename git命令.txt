@@ -7,6 +7,9 @@
 4、git commit  -m  "填写备注信息"   //提交
 5、git push -u origin master        //上传到github上
 
+<!-- 下载到本地 -->
+ git clone url
+
 <!--部分修改上传-->
 1. git add .(文件name) //添加文件到本地仓库
 2. git commit -m "first commit" //添加文件描述信息
